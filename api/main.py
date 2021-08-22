@@ -1,33 +1,13 @@
-from fastapi import FastAPI
-from database import fetch_query
-from pydantic import BaseModel
+from fastapi import Depends, FastAPI
+#from .dependencies import get_query_token, get_token_header
 
+from routers import profiles
+
+#app = FastAPI(dependencies=[Depends(get_query_token)])
 app = FastAPI()
 
-class Profile(BaseModel):
-    uuid: str
-    fname: str
-    lname: str
+app.include_router(profiles.router)
 
-# Create some test data for our catalog in the form of a list of dictionaries.
-def all_profiles():
-    response = fetch_query('(SELECT * FROM profiles)')
-    return response
-
-def profile_by_uuid(uuid):
-    response = fetch_query('(SELECT * FROM profiles WHERE uuid = "%s")'%(uuid))
-    return response
-
-# A route to return all of the available entries in our catalog.
-@app.get('/api/v1/resources/profiles/all')
-def api_all_profiles():
-    return all_profiles()
-
-@app.get('/api/v1/resources/profiles/{uuid}')
-def api_profile_by_uuid(uuid):
-    print("UUID sent = {}".format(uuid))
-    return profile_by_uuid(uuid)
-
-@app.post('/api/v1/resources/profile/')
-def insert_profile(profile: Profile):
-    return {"uuid": profile.uuid, "fname": profile.fname, "lname": profile.lname}
+@app.get("/")
+async def root():
+    return {"message": "Hello Bigger Applications!"}

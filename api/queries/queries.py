@@ -16,6 +16,14 @@ def fetch_query(query):
     cursor = connection.cursor(dictionary=True)
     cursor.execute(query)
     data = cursor.fetchall()
+    cursor.close()
     connection.close()
     return data
  
+def all_profiles():
+    response = fetch_query('(SELECT * FROM profiles)')
+    return response
+
+def profile_by_uuid(uuid):
+    response = fetch_query('(SELECT * FROM profiles WHERE uuid = "%s")'%(uuid))
+    return response
