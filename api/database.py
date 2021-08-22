@@ -8,5 +8,14 @@ config = {
   'raise_on_warnings': True
 }
 
-def get_db_conn():
+def connectdb():
     return mysql.connector.connect(**config)
+
+def fetch_query(query):
+    connection = connectdb()
+    cursor = connection.cursor(dictionary=True)
+    cursor.execute(query)
+    data = cursor.fetchall()
+    connection.close()
+    return data
+ 
