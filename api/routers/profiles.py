@@ -1,6 +1,7 @@
 from fastapi import APIRouter
 from queries import queries
-from models import models
+from models import models,tables
+from sql import database
 
 router = APIRouter(
     prefix="/profiles",
@@ -11,7 +12,7 @@ router = APIRouter(
 #A route to return all of the available entries in our catalog.
 @router.get('/all', summary='Get list of all profiles')
 async def api_all_profiles():
-    return queries.all_profiles()
+    return database.Session().query(tables.Profile).all()
 
 @router.get('/{uuid}',summary='Get profile')
 async def api_profile_by_uuid(uuid):
