@@ -1,6 +1,6 @@
 from pydantic import BaseModel
 
-class Profile(BaseModel):
+class ProfileVO(BaseModel):
     uuid: str
     fname: str
     lname: str
